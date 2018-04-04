@@ -24,7 +24,7 @@ def getHtml(url):
 # 清除leancloud数据
 def delete():
     # 初始化leancloud
-    leancloud.init("tprA4QlLY29nvh5QmiWsNl0s-gzGzoHsz", "6fralNJ21L9HskFfTE2Lxciu")
+    leancloud.init("tprA4QlLY29nvh5QmiWsNl0s-gzGzoHsz", "idYvbwv28UfweEIJJ01E8bBb")
     # 开启日志
     # logging.basicConfig(level=logging.DEBUG)
     timestring = time.strftime('%Y%m%d%H', time.localtime(time.time()))
