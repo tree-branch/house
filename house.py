@@ -5,7 +5,7 @@ import leancloud
 import urllib.request
 import time
 
-from anjuke import AnjvkeParser
+from anjuke import AnjukeParser
 from ganji import GanjiParser
 from lianjia import LianjiaParser
 from tongcheng import TongchengParser
@@ -18,13 +18,13 @@ def getHtml(url):
     req = urllib.request.Request(url, headers=HEADERS)
     page = urllib.request.urlopen(req)  # urllib.urlopen()方法用于打开一个URL地址
     html = page.read()  # read()方法用于读取URL上的数据
-    return html.decode('UTF-8').replace(u'\xa9', u'').replace("'", "").replace("\r\n", "").replace("\n","")  # 汉字转换及正则匹配无法对换行进行处理及去掉单引号
+    return html.decode('UTF-8').replace(u'\xa9', u'').replace("'", "").replace("\r\n", "").replace("\n", "")  # 汉字转换及正则匹配无法对换行进行处理及去掉单引号
 
 
 # 清除leancloud数据
 def delete():
     # 初始化leancloud
-    leancloud.init("tprA4QlLY29nvh5QmiWsNl0s-gzGzoHsz", "idYvbwv28UfweEIJJ01E8bBb")
+    leancloud.init("tprA4QlLY29nvh5QmiWsNl0s-gzGzoHsz", "6fralNJ21L9HskFfTE2Lxciu")
     # 开启日志
     # logging.basicConfig(level=logging.DEBUG)
     timestring = time.strftime('%Y%m%d%H', time.localtime(time.time()))
@@ -71,14 +71,14 @@ def tongcheng_save(html):
 
 
 # 安居客
-def anjvke_save(html):
-    anjvke = AnjvkeParser()
-    houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = anjvke.feed(html)
+def anjuke_save(html):
+    anjuke = AnjukeParser()
+    houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = anjuke.feed(html)
     save('安居客', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
 
 
 # 赶集
-def ganji_save(url):
+def ganji_save(html):
     ganji = GanjiParser()
     houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = ganji.feed(html)
     save('赶集', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
@@ -88,6 +88,7 @@ def ganji_save(url):
 # 清除数据
 delete()
 
+anjuke1 = getHtml('''https://beijing.anjuke.com/sale/o5/?from_area=60&to_area=100&from_price=200&to_price=600''')
 # 链家 （例：北京 0-600万 60-100平） 根据自己需求添加链接
 lianjia1 = getHtml('''https://bj.lianjia.com/ershoufang/bp0ep600ba60ea100l3/rs/''')
 lianjia2 = getHtml('''https://bj.lianjia.com/ershoufang/pg2l3ba60ea100ep600/''')
@@ -104,15 +105,15 @@ for lianjia_html in lianjia_htmls:
 # tongcheng_htmls = [tongcheng1, tongcheng2, tongcheng3]
 # for tongcheng_html in tongcheng_htmls:
 #     tongcheng_save(tongcheng_html)
-#
-# # 安居客 高新园区 80-120W 3室 精装修
-# anjuke1 = getHtml('''http://dalian.anjuke.com/sale/gaoxinyuanqua/b136-d52-o5/?from_price=80&to_price=120''')
-# anjuke2 = getHtml('''http://dalian.anjuke.com/sale/gaoxinyuanqua/b136-d52-o5-p2/?from_price=80&to_price=120''')
-# anjuke3 = getHtml('''http://dalian.anjuke.com/sale/gaoxinyuanqua/b136-d52-o5-p3/?from_price=80&to_price=120''')
-# anjvke_htmls = [anjuke1, anjuke2, anjuke3]
-# for anjvke_html in anjvke_htmls:
-#     anjvke_save(anjvke_html)
-#
+
+# 安居客 （例：北京 200-600万 60-100平 按最新排序） 根据自己需求添加链接
+anjuke1 = getHtml('''https://beijing.anjuke.com/sale/o5/?from_area=60&to_area=100&from_price=200&to_price=600''')
+anjuke2 = getHtml('''https://beijing.anjuke.com/sale/o5-p2/?from_area=60&to_area=100&from_price=200&to_price=600#filtersort''')
+anjuke3 = getHtml('''https://beijing.anjuke.com/sale/o5-p3/?from_area=60&to_area=100&from_price=200&to_price=600#filtersort''')
+anjuke_htmls = [anjuke1, anjuke2, anjuke3]
+for anjuke_html in anjuke_htmls:
+    anjuke_save(anjuke_html)
+
 # # 赶集 高新园区 80-120W 3室 精装修
 # ganji1 = getHtml('''http://dl.ganji.com/fang5/gaoxinyuanqu/b80e120h3q2/''')
 # ganji2 = getHtml('''http://dl.ganji.com/fang5/gaoxinyuanqu/b80e120h3o2q2/''')

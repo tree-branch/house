@@ -33,13 +33,6 @@ class AnjukeParser(HTMLParser):
 
     def feed(self, data):
         super().feed(data)
-        print(self.houseName)
-        print(self.villageName)
-        # print(self.houseNote.encode('GB18030'))
-        print(self.houseTotlePrice)
-        # print(self.houseUnitPrice)
-        print(self.houseLink)
-        print(self.houseImg)
         # 校验数据个数是否统一
         size = len(self.houseName)
         if len(self.houseName) != size or len(self.villageName) != size or len(self.houseNote) != size \
