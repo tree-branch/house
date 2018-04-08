@@ -5,7 +5,7 @@ import leancloud
 import urllib.request
 import time
 
-from anjvke import AnjvkeParser
+from anjuke import AnjvkeParser
 from ganji import GanjiParser
 from lianjia import LianjiaParser
 from tongcheng import TongchengParser
