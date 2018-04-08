@@ -2,3 +2,5 @@
 *.bak
 *.iml
 tmp.py
+__pycache__/anjuke.cpython-36.pyc
+.idea/workspace.xml
