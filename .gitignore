@@ -1,2 +1,4 @@
 
 *.bak
+*.iml
+tmp.py
