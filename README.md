@@ -11,3 +11,6 @@ python house.py
 修改delete_mysql() 为 delete() 修改所有save_mysql()为save()即可
 
 修改链家的网址，查询的限定条件需要能够保存在URL内，例如链家的排序也是可以保存在URL内的，一看例子你也应该就懂了，不懂的话就再看一遍。
+
+有想说的联系：lm521299@sina.com
+
