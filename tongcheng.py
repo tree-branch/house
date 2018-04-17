@@ -2,11 +2,14 @@
 
 from html.parser import HTMLParser
 
+
 class TongchengParser(HTMLParser):
     def __init__(self):
         super().__init__()
-        # 存储中间数据（链家为总房价与单价）
-        self.span = ""
+        # 存储中间数据（58同城为小区名,房屋介绍）
+        self.span_a = ""
+        # 存储中间数据（58同城为总价）
+        self.b = ""
         # 房屋名称
         self.houseName = []
         # 小区名称
@@ -37,67 +40,74 @@ class TongchengParser(HTMLParser):
                              ",houseImg-" + str(len(self.houseImg)))
         return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg
 
-    # def handle_starttag(self, tag, attrs):
-    #     if tag == "span":
-    #         self.flag.append("span")
-    #     elif tag == "a" and ("data-el", "ershoufang") in attrs and ("class", "") in attrs:
-    #         self.flag.append("houseName")
-    #         for attr in attrs:
-    #             if attr[0] == "href":
-    #                 self.houseLink.append(attr[1])
-    #     elif tag == "a" and ("data-el", "region") in attrs:
-    #         self.flag.append("villageName")
-    #     elif tag == "div" and ("class", "houseInfo") in attrs:
-    #         self.flag.append("houseNote")
-    #     elif tag == "div" and ("class", "totalPrice") in attrs:
-    #         self.flag.append("houseTotlePrice_2")
-    #     elif tag == "div" and ("class", "unitPrice") in attrs:
-    #         self.flag.append("houseUnitPrice_2")
-    #     elif tag == "img" and ("class", "lj-lazy") in attrs:
-    #         for attr in attrs:
-    #             if attr[0] == "alt":
-    #                 for attr2 in attrs:
-    #                     if attr2[0] == "data-original":
-    #                         self.houseImg.append(attr2[1])
-    #                         break
-    #                 break
-    #
-    # def handle_data(self, data):
-    #     if len(self.flag) != 0:
-    #         if self.flag[-1] == "span":
-    #             # print(str(data))
-    #             self.span = data
-    #             self.flag.pop()
-    #             if len(self.flag) > 0 and self.flag[-1] == "houseUnitPrice_2":
-    #                 self.houseUnitPrice.append(self.span)
-    #                 self.flag.pop()
-    #         elif self.flag[-1] == "houseName":
-    #             # print(str(data))
-    #             self.houseName.append(data)
-    #             self.flag.pop()
-    #         elif self.flag[-1] == "villageName":
-    #             # print(str(data))
-    #             self.villageName.append(data)
-    #             self.flag.pop()
-    #         elif self.flag[-1] == "houseNote":
-    #             # print(str(data))
-    #             self.houseNote.append(data)
-    #             self.flag.pop()
-    #         elif self.flag[-1] == "houseTotlePrice_2":
-    #             # print(str(data))
-    #             self.houseTotlePrice.append(self.span + data)
-    #             self.span = ""
-    #             self.flag.pop()
-    #         # elif self.flag[-1] == "houseUnitPrice_2":
-    #         #     self.houseUnitPrice.append(self.span + data)
-    #         #     self.span = ""
-    #         #     self.flag.pop()
-    #         # elif self.flag[-1] == "houseLink":
-    #         #     print(str(data))
-    #         #     self.houseLink.append(data)
-    #         #     self.flag.pop()
-    #         # elif self.flag[-1] == "houseImg":
-    #         #     print(str(data))
-    #         #     self.houseImg.append(data)
-    #         #     self.flag.pop()
+    def handle_starttag(self, tag, attrs):
+        if tag == "span":
+            self.flag.append("span")
+        elif tag == "a" and ("tongji_label", "listclick") in attrs:
+            self.flag.append("houseName")
+            for attr in attrs:
+                if attr[0] == "href":
+                    self.houseLink.append(attr[1])
+                    break
+        elif tag == "a" and len(self.flag) >= 1 and self.flag[-1] == "houseNote_2":
+            self.flag.append("a")
+            self.flag[-2] = 'villageName_2'
+        elif tag == "a":
+            self.flag.append("a")
+        elif tag == "b":
+            self.flag.append("b")
+        elif tag == "p" and ("class", "baseinfo") in attrs:
+            self.flag.append("houseNote_2")
+            self.span_a = ''
+        elif tag == "p" and ("class", "sum") in attrs:
+            self.flag.append("houseTotlePrice_2")
+        elif tag == "p" and ("class", "unit") in attrs:
+            self.flag.append("houseUnitPrice")
+        elif tag == "img":
+            for attr in attrs:
+                if attr[0] == "data-src":
+                    self.houseImg.append(attr[1])
+                    break
+
+    def handle_endtag(self, tag):
+        if len(self.flag) != 0:
+            if tag == "p" and self.flag[-1] == "villageName_2":
+                # 此时为villageName的结束
+                # print(self.span.encode('GB18030'))
+                self.villageName.append(self.span_a.replace(' ', ''))
+                self.flag.pop()
+                self.span_a = ""
+            elif tag == "p" and self.flag[-1] == "houseNote_2":
+                # 此时为houseNote的结束
+                # print(self.span.encode('GB18030'))
+                self.houseNote.append(self.span_a.replace(' ', ''))
+                self.flag.pop()
+                self.span_a = ""
+
+    def handle_data(self, data):
+        if len(self.flag) != 0:
+            if self.flag[-1] == "span":
+                # print(str(data))
+                self.span_a += data.strip()
+                self.flag.pop()
+            elif self.flag[-1] == "a":
+                # print(str(data))
+                self.span_a += data.strip()
+                self.flag.pop()
+            elif self.flag[-1] == "b":
+                # print(str(data))
+                self.b += data
+                self.flag.pop()
+            elif self.flag[-1] == "houseName":
+                # print(str(data))
+                self.houseName.append(data)
+                self.flag.pop()
+            elif self.flag[-1] == "houseTotlePrice_2" and data.replace(' ', '') != '':
+                # print(str(data))
+                self.houseTotlePrice.append(self.b + data.replace(' ', ''))
+                self.b = ""
+                self.flag.pop()
+            elif self.flag[-1] == "houseUnitPrice":
+                self.houseUnitPrice.append(data)
+                self.flag.pop()
 

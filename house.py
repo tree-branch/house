@@ -143,7 +143,7 @@ def lianjia_save(html):
 def tongcheng_save(html):
     tongcheng = TongchengParser()
     houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = tongcheng.feed(html)
-    save('58同城', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
+    save_mysql('58同城', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
 
 
 # 安居客
@@ -174,14 +174,15 @@ lianjia_htmls = [lianjia1, lianjia2, lianjia3]
 for lianjia_html in lianjia_htmls:
     lianjia_save(lianjia_html)
 
-#
-# # 58同城 高新园区 80-120W 3室 精装修
-# tongcheng1 = getHtml('''http://dl.58.com/gaoxinyuanqu/ershoufang/e3j4/?huansuanyue=80_120&bunengdaikuan=0''')
-# tongcheng2 = getHtml('''http://dl.58.com/gaoxinyuanqu/ershoufang/e3j4/pn2/?huansuanyue=80_120&bunengdaikuan=0''')
-# tongcheng3 = getHtml('''http://dl.58.com/gaoxinyuanqu/ershoufang/e3j4/pn3/?huansuanyue=80_120&bunengdaikuan=0''')
-# tongcheng_htmls = [tongcheng1, tongcheng2, tongcheng3]
-# for tongcheng_html in tongcheng_htmls:
-#     tongcheng_save(tongcheng_html)
+
+# 58同城 高新园区 80-120W 3室 精装修
+tongcheng1 = getHtml('''http://bj.58.com/ershoufang/?PGTID=0d00000c-0000-099e-5f9d-eb7cd9b2d735&ClickID=1&huansuanyue=200_600&bunengdaikuan=0&area=60_100''')
+tongcheng2 = getHtml('''http://bj.58.com/ershoufang/pn2/?huansuanyue=200_600&bunengdaikuan=0&area=60_100&PGTID=0d300000-0000-0b90-1e0b-bf894f74b13a&ClickID=1''')
+tongcheng3 = getHtml('''http://bj.58.com/ershoufang/pn3/?huansuanyue=200_600&bunengdaikuan=0&area=60_100&PGTID=0d300000-0000-08f9-ba56-6673c850e2b8&ClickID=1''')
+# print(str(tongcheng1.encode('GB18030')))
+tongcheng_htmls = [tongcheng1, tongcheng2, tongcheng3]
+for tongcheng_html in tongcheng_htmls:
+    tongcheng_save(tongcheng_html)
 
 # 安居客 （例：北京 200-600万 60-100平 按最新排序） 根据自己需求添加链接
 anjuke1 = getHtml('''https://beijing.anjuke.com/sale/o5/?from_area=60&to_area=100&from_price=200&to_price=600''')
