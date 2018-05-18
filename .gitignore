@@ -6,3 +6,4 @@ __pycache__/anjuke.cpython-36.pyc
 .idea/workspace.xml
 *.pyc
 test.py
+.idea/misc.xml

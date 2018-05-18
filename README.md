@@ -3,7 +3,9 @@
 
 ## 直接运行
 修改mysql链接地址（需要改两个位置）
+python3.0及以上版本
 python house.py
+缺什么包就 pip install ***
 
 ## 个性化运行
 此程序是把leancloud作为云数据库使用;在 https://leancloud.cn/ 内建立账号;修改house.py为自己的App ID App KEY
@@ -14,4 +16,4 @@ python house.py
 
 ## 联系方式
 有想说的联系：lm521299@sina.com
-
+** 李 茂超----你的邮件我回复不了，抱歉耽误你这么长时间。
