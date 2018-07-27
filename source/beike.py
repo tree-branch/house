@@ -40,7 +40,7 @@ class BeikeParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == "span":
             self.flag.append("span")
-        elif tag == "a" and ("class", "CLICKDATA") in attrs:
+        elif tag == "a" and ("class", "CLICKDATA maidian-detail") in attrs:
             self.flag.append("houseName")
             for attr in attrs:
                 if attr[0] == "href":
