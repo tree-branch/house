@@ -47,6 +47,8 @@ class LianjiaParser(HTMLParser):
                     self.houseLink.append(attr[1])
         elif tag == "a" and ("data-el", "region") in attrs:
             self.flag.append("villageName")
+        elif tag == "a" and ("class", "no_resblock_a") in attrs:
+            self.flag.append("villageName")
         elif tag == "div" and ("class", "houseInfo") in attrs:
             self.flag.append("houseNote")
         elif tag == "div" and ("class", "totalPrice") in attrs:
