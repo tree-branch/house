@@ -23,6 +23,7 @@ class BeikeParser(HTMLParser):
         self.houseImg = []
         # 用于标记数据类型
         self.flag = []
+        self.sign = 0
 
     def feed(self, data):
         super().feed(data)
@@ -39,18 +40,22 @@ class BeikeParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         if tag == "span":
+            if ("class", "houseIcon") in attrs:
+                self.flag.append("houseNote")
             self.flag.append("span")
-        elif tag == "a" and ("class", "CLICKDATA maidian-detail") in attrs:
-            self.flag.append("houseName")
+        elif tag == "a" and ("class", "img VIEWDATA CLICKDATA maidian-detail") in attrs:
+            # self.flag.append("houseName")
             for attr in attrs:
-                if attr[0] == "href":
+                if attr[0] == "title":
+                    self.houseName.append(attr[1])
+                elif attr[0] == "href":
                     self.houseLink.append(attr[1])
-        elif tag == "a" and ("data-el", "region") in attrs:
-            self.flag.append("villageName")
-        elif tag == "a" and ("class", "no_resblock_a") in attrs:
-            self.flag.append("villageName")
-        elif tag == "div" and ("class", "houseInfo") in attrs:
-            self.flag.append("houseNote")
+        # elif tag == "a" and ("data-el", "region") in attrs:
+        #     self.flag.append("villageName")
+        # elif tag == "a" and ("class", "no_resblock_a") in attrs:
+        #     self.flag.append("villageName")
+        # elif tag == "div" and ("class", "houseInfo") in attrs:
+        #     self.flag.append("houseNote")
         elif tag == "div" and ("class", "totalPrice") in attrs:
             self.flag.append("houseTotlePrice_2")
         elif tag == "div" and ("class", "unitPrice") in attrs:
@@ -73,18 +78,24 @@ class BeikeParser(HTMLParser):
                 if len(self.flag) > 0 and self.flag[-1] == "houseUnitPrice_2":
                     self.houseUnitPrice.append(self.span)
                     self.flag.pop()
+                elif len(self.flag) > 0 and self.flag[-1] == "houseNote":
+                    self.houseNote.append(self.span.replace(' ',''))
+                    self.villageName.append(self.span.split('|')[0].strip())
+                    self.flag.pop()
             elif self.flag[-1] == "houseName":
                 # print(str(data))
                 self.houseName.append(data)
                 self.flag.pop()
-            elif self.flag[-1] == "villageName":
-                # print(str(data))
-                self.villageName.append(data)
-                self.flag.pop()
-            elif self.flag[-1] == "houseNote":
-                # print(str(data))
-                self.houseNote.append(data)
-                self.flag.pop()
+            # elif self.flag[-1] == "villageName":
+            #     # print(str(data))
+            #     self.villageName.append(data)
+            #     self.flag.pop()
+            # elif self.flag[-1] == "houseNote":
+            #     print(self.span)
+            #     self.houseNote.append(self.span)
+            #     self.villageName.append(self.span.split('|')[0])
+            #     self.span = ""
+            #     self.flag.pop()
             elif self.flag[-1] == "houseTotlePrice_2":
                 # print(str(data))
                 self.houseTotlePrice.append(self.span + data)

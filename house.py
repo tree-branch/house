@@ -3,7 +3,10 @@
 
 from source.save import saveData
 from source.common import getHtml
+from source.report import reportData
 import configparser
+import webbrowser
+import os
 
 
 # ------主函数------
@@ -57,5 +60,10 @@ if __name__ == '__main__':
     # ganji_htmls = [ganji1, ganji2, ganji3]
     # for ganji_html in ganji_htmls:
     #     ganji_save(ganji_html)
+
+    print("生成报告中...")
+    rep = reportData()
+    reportFileName = rep.get_report()
+    webbrowser.open('''file:///''' + os.path.dirname(__file__) + '''/reports/''' + reportFileName)
 
     print("OVER!!!")

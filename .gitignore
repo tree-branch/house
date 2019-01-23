@@ -4,3 +4,5 @@ tmp.py
 __pycache__/*
 .idea/*
 test/*
+*.html
+temp.py
