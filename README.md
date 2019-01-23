@@ -20,5 +20,8 @@ python house.py
 ## 联系方式
 有想说的联系：lm521299@sina.com
 
-
-**大家有什么想增加的功能可以跟我提，我最近有时间想继续完善一下，最近房价趋于平稳了，政策也有松动，对于刚需来说应该继续筹划了。**
+## 20190123log
+1.增加简单的数据比较功能
+![](https://github.com/tree-branch/_image/blob/master/img001.png)
+2.使用leancloud的需要添加masterkey参数到config.ini中
+3.希望发现不好用的时候通知我一下，方便我尽快修改，谢谢 :-)
