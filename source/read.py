@@ -37,13 +37,23 @@ class readData():
         import pandas as pd
 
         url = 'https://tpra4qll.api.lncld.net/1.1/classes/'
+        limit = 200
+        skip = 0
         head = {
             "X-LC-Id": self._config['leancloud']['appid'],
             "X-LC-Key": self._config['leancloud']['appkey'],
             "Content-Type": "application/json"
         }
-        response = requests.get(url + str(tablename), headers=head)
-        data = pd.DataFrame(response.json()["results"])
+        sign = 1
+        data = pd.DataFrame()
+        while(sign):
+            response = requests.get(url + str(tablename) + '?limit=' + str(limit) + '&skip=' + str(skip), headers=head)
+            data = data.append(pd.DataFrame(response.json()["results"]))
+            if len(response.json()["results"])==0:
+                sign = 0
+            skip = skip + limit
+        data = data.drop_duplicates(['houseLink'])
+        print(len(data))
         return data
 
     # 读取 mysql 表名列表

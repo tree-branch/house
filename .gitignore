@@ -6,3 +6,4 @@ __pycache__/*
 test/*
 *.html
 temp.py
+source/__pycache__/*

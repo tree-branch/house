@@ -20,8 +20,12 @@ python house.py
 ## 联系方式
 有想说的联系：lm521299@sina.com
 
+## 20190215log
+* 修正使用leancloud时，生成报告时读取数据不全的问题。此bug只影响报告的生成，不影响数据爬取
+
 ## 20190123log
 * 增加简单的数据比较功能
 * 使用leancloud的需要添加masterkey参数到config.ini中
-* 希望发现不好用的时候通知我一下，方便我尽快修改，谢谢 :-)
 ![](https://github.com/tree-branch/_image/blob/master/img001.png)
+
+# 希望发现不好用的时候邮件通知我一下，方便我尽快修改，谢谢 :-)
