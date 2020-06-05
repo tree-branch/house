@@ -1,5 +1,7 @@
 # house
-爬取贝壳找房、链家、安居客、58同城（赶集后续更新）的房源信息，便于广大未买房子的朋友们尽快成为房奴！！！Crawl the house informations of lianjia.com (anjvke.com, 58.com, ganji.com after the update), convenient for the majority of friends who did not buy the house as soon as to become the mortgage slave!!!
+此为二手房数据,需要新房数据的移步[new_house](https://github.com/tree-branch/new_house)
+
+爬取贝壳找房、链家、安居客、58同城的房源信息，便于广大未买房子的朋友们尽快成为房奴！！！Crawl the house informations of lianjia.com (anjvke.com, 58.com, ganji.com after the update), convenient for the majority of friends who did not buy the house as soon as to become the mortgage slave!!!
 
 ## 直接运行
 修改config.ini内的mysql链接地址
@@ -26,6 +28,10 @@ python house.py
 ## 20190123log
 * 增加简单的数据比较功能
 * 使用leancloud的需要添加masterkey参数到config.ini中
+
+## 20200605log
+* 增加报告上的房屋连接可以直接跳转
+
 ![](https://github.com/tree-branch/_image/blob/master/img001.png)
 
 # 希望发现不好用的时候邮件通知我一下，方便我尽快修改，谢谢 :-)

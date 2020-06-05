@@ -87,9 +87,9 @@ class reportData():
                 <td>%s</td>
                 <td>%s</td>
                 <td>%s</td>
+                <td><a href="%s" target="_blank">%s</a></td>
                 <td>%s</td>
-                <td>%s</td>
-            </tr>'''% (row.sign, row.houseName, row.houseNote, row.houseTotlePrice, row.old_houseTotlePrice, row.houseUnitPrice, row.villageName, row.houseLink, row.webName)
+            </tr>'''% (row.sign, row.houseName, row.houseNote, row.houseTotlePrice, row.old_houseTotlePrice, row.houseUnitPrice, row.villageName, row.houseLink if row.houseLink[:4]=="http" else "http://" + row.houseLink, row.houseLink, row.webName)
         return result
 
     # 生成报告文件
