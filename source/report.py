@@ -98,7 +98,7 @@ class reportData():
         import configparser
         import os
 
-        start = time.clock()
+        start = time.perf_counter()
         # 获取参数
         config = configparser.ConfigParser()
         config.read("config.ini")
@@ -178,7 +178,7 @@ class reportData():
         if data30 is not None:
             # 较30天结果html
             result30 = self._get_table_label('day30', (-1)*day30, data0, data30)
-        end = time.clock()
+        end = time.perf_counter()
         html = temp.html_temp % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())), str(end-start) + 's', result1, result7, result30)
 
         f = open(os.path.dirname(__file__) + '''/../reports/''' + self._reportFileName + '.html', 'wb')
