@@ -32,6 +32,6 @@ python house.py
 ## 20200605log
 * 增加报告上的房屋连接可以直接跳转
 
-![](https://github.com/tree-branch/_image/blob/master/img001.png)
+![](https://img-blog.csdnimg.cn/20200715103658153.png)
 
 # 希望发现不好用的时候邮件通知我一下，方便我尽快修改，谢谢 :-)
