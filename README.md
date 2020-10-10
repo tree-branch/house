@@ -35,3 +35,5 @@ python house.py
 ![](https://img-blog.csdnimg.cn/20200715103658153.png)
 
 # 希望发现不好用的时候邮件通知我一下，方便我尽快修改，谢谢 :-)
+![](https://starchart.cc/tree-branch/house.svg)
+↑看一下大家什么时候喜欢关注房源信息↑
