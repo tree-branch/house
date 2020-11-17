@@ -40,7 +40,7 @@ class LianjiaParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == "span":
             self.flag.append("span")
-        elif tag == "a" and ("data-el", "ershoufang") in attrs and ("class", "") in attrs:
+        elif tag == "a" and ("data-el", "ershoufang") in attrs and ("class", "title") in attrs:
             self.flag.append("houseName")
             for attr in attrs:
                 if attr[0] == "href":
