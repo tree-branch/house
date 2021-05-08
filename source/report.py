@@ -166,9 +166,9 @@ class reportData():
         if tn30 is not None:
             # 得到day30天的数据
             data30 = read.read_data(tn30)
-        result1 = None
-        result7 = None
-        result30 = None
+        result1 = "没有昨天的数据"
+        result7 = "没有上周的数据"
+        result30 = "没有上个月的数据"
         if data1 is not None:
             # 较1天结果html
             result1 = self._get_table_label('day1', (-1)*day1, data0, data1)
@@ -179,7 +179,7 @@ class reportData():
             # 较30天结果html
             result30 = self._get_table_label('day30', (-1)*day30, data0, data30)
         end = time.perf_counter()
-        html = temp.html_temp % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())), str(end-start) + 's', result1, result7, result30)
+        html = temp.html_temp % (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())), "%.2f"%(end-start) + 's', result1, result7, result30)
 
         f = open(os.path.dirname(__file__) + '''/../reports/''' + self._reportFileName + '.html', 'wb')
         f.write(html.encode('utf-8'))

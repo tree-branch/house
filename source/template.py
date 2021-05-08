@@ -105,11 +105,11 @@ html_temp = '''
     <div class='page-header'>
         <h1>房屋价格情况统计</h1>
         <p class='attribute'><strong>统计时间:</strong> %s</p>
-        <p class='attribute'><strong>运行时长:</strong> %s</p>
+        <p class='attribute'><strong>报告耗时:</strong> %s</p>
     </div>
-%s
-%s
-%s
+%s<br>
+%s<br>
+%s<br>
 </div>
 </body>
 </html>

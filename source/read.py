@@ -53,7 +53,6 @@ class readData():
                 sign = 0
             skip = skip + limit
         data = data.drop_duplicates(['houseLink'])
-        print(len(data))
         return data
 
     # 读取 mysql 表名列表

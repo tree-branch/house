@@ -15,6 +15,7 @@ class BeikeParser(HTMLParser):
         self.houseNote = []
         # 总价
         self.houseTotlePrice = []
+        self.houseTotlePrice_tmp = "" #用于拼接houseTotlePrice
         # 单价
         self.houseUnitPrice = []
         # 房屋链接
@@ -68,19 +69,24 @@ class BeikeParser(HTMLParser):
                             self.houseImg.append(attr2[1])
                             break
                     break
+        elif tag == "div" and ("class", "positionInfo") in attrs:
+            self.flag.append("villageName_1")
+        elif tag == "a" and len(self.flag) > 0 and self.flag[-1] == "villageName_1":
+            self.flag.pop()
+            self.flag.append("villageName_2")
 
     def handle_data(self, data):
-        if len(self.flag) != 0:
+        data = data.replace(' ', '')
+        if len(self.flag) > 0:
             if self.flag[-1] == "span":
-                # print(str(data))
                 self.span = data
                 self.flag.pop()
                 if len(self.flag) > 0 and self.flag[-1] == "houseUnitPrice_2":
                     self.houseUnitPrice.append(self.span)
                     self.flag.pop()
                 elif len(self.flag) > 0 and self.flag[-1] == "houseNote":
-                    self.houseNote.append(self.span.replace(' ',''))
-                    self.villageName.append(self.span.split('|')[0].strip())
+                    self.houseNote.append(self.span)
+                    # self.villageName.append(self.span.split('|')[0].strip())
                     self.flag.pop()
             elif self.flag[-1] == "houseName":
                 # print(str(data))
@@ -97,8 +103,18 @@ class BeikeParser(HTMLParser):
             #     self.span = ""
             #     self.flag.pop()
             elif self.flag[-1] == "houseTotlePrice_2":
-                # print(str(data))
-                self.houseTotlePrice.append(self.span + data)
+                if data != "":
+                    self.houseTotlePrice_tmp = self.houseTotlePrice_tmp + self.span + data
                 self.span = ""
+                # self.flag.pop()
+            elif self.flag[-1] == "villageName_2":
+                # print(str(data))
+                self.villageName.append(data)
                 self.flag.pop()
+
+    def handle_endtag(self, tag):
+        if tag == "div" and len(self.flag) > 0 and self.flag[-1] == "houseTotlePrice_2":
+            self.houseTotlePrice.append(self.houseTotlePrice_tmp)#.replace(' ', ''))
+            self.houseTotlePrice_tmp = ""
+            self.flag.pop()
 

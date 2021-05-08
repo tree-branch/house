@@ -13,6 +13,7 @@ class LianjiaParser(HTMLParser):
         self.villageName = []
         # 房子介绍
         self.houseNote = []
+        self.houseNote_tmp = "" #用于拼接houseNote
         # 总价
         self.houseTotlePrice = []
         # 单价
@@ -65,7 +66,8 @@ class LianjiaParser(HTMLParser):
                     break
 
     def handle_data(self, data):
-        if len(self.flag) != 0:
+        data = data.replace(' ', '')
+        if len(self.flag) > 0:
             if self.flag[-1] == "span":
                 # print(str(data))
                 self.span = data
@@ -81,13 +83,16 @@ class LianjiaParser(HTMLParser):
                 # print(str(data))
                 self.villageName.append(data)
                 self.flag.pop()
-            elif self.flag[-1] == "houseNote":
-                # print(str(data))
-                self.houseNote.append(data)
-                self.flag.pop()
             elif self.flag[-1] == "houseTotlePrice_2":
                 # print(str(data))
                 self.houseTotlePrice.append(self.span + data)
                 self.span = ""
                 self.flag.pop()
+            if len(self.flag) > 0 and self.flag[-1] == "houseNote":
+                self.houseNote_tmp = self.houseNote_tmp + data
 
+    def handle_endtag(self, tag):
+        if tag == "div" and len(self.flag) > 0 and self.flag[-1] == "houseNote":
+            self.houseNote.append(self.houseNote_tmp)
+            self.houseNote_tmp = ""
+            self.flag.pop()
