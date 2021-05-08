@@ -11,6 +11,7 @@ python3.0及以上版本
 python house.py
 
 缺什么包就 pip install ***
+
 大概率缺少(pymysql, leancloud, cryptography)
 
 ## 个性化运行
