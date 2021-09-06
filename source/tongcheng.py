@@ -38,7 +38,7 @@ class TongchengParser(HTMLParser):
                              ",houseNote-" + str(len(self.houseNote)) + ",houseTotlePrice-" + str(len(self.houseTotlePrice)) +
                              ",houseUnitPrice-" + str(len(self.houseUnitPrice)) + ",houseLink-" + str(len(self.houseLink)) +
                              ",houseImg-" + str(len(self.houseImg)))
-        return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg
+        return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg, [0]*len(self.houseImg)
 
     def handle_starttag(self, tag, attrs):
         if tag == "span":

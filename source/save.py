@@ -34,13 +34,14 @@ class saveData():
 
     # 保存到leancloud
     def _save_leancloud(self, webName, houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink,
-                        houseImg):
+                        houseImg, followNum):
         import leancloud
         # 初始化leancloud
         leancloud.init(self._config['leancloud']['appid'], self._config['leancloud']['appkey'])
         # 开启日志
         # logging.basicConfig(level=logging.DEBUG)
         timestring = time.strftime('%Y%m%d%H', time.localtime(time.time()))
+        # timestring = "2021090510"
         tablename = 'T' + timestring + 'TheFutureOfHome'
         TestObject = leancloud.Object.extend(tablename)
         for i in range(0, len(houseName)):
@@ -53,13 +54,15 @@ class saveData():
             test_object.set('houseUnitPrice', houseUnitPrice[i])
             test_object.set('houseLink', houseLink[i])
             test_object.set('houseImg', houseImg[i])
+            test_object.set('followNum', followNum[i])
             try:
                 test_object.save()
-            except:
+            except Exception as e:
+                print(e)
                 print(
-                    "webName:%s\nhouseName:%s\nvillageName:%s\nhouseNote:%s\nhouseTotlePrice:%s\nhouseUnitPrice:%s\nhouseLink:%s\nhouseImg:%s\n" % (
+                    "webName:%s\nhouseName:%s\nvillageName:%s\nhouseNote:%s\nhouseTotlePrice:%s\nhouseUnitPrice:%s\nhouseLink:%s\nhouseImg:%s\nfollowNum:%s\n" % (
                         webName, houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink,
-                        houseImg))
+                        houseImg, followNum))
         print(webName + ' saved ' + str(len(houseName)) + ' rows.')
 
     # 清理mysql数据
@@ -88,7 +91,7 @@ class saveData():
 
     # 保存到mysql
     def _save_mysql(self, webName, houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink,
-                    houseImg):
+                    houseImg, followNum):
         import pymysql
         # 用于忽略表已存在的警告
         import warnings
@@ -114,22 +117,23 @@ class saveData():
             houseUnitPrice varchar(255),
             houseLink varchar(255),
             houseImg varchar(255),
+            followNum varchar(255),
             primary key(Id)
         )
         ENGINE=InnoDB DEFAULT CHARSET=utf8;""" % (tablename)
         cursor.execute(create_table_sql)
 
-        insert_sql = """insert into %s (webName, houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg) values """ % (
+        insert_sql = """insert into %s (webName, houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum) values """ % (
             tablename)
         for i in range(0, len(houseName)):
             if i == 0:
-                insert_sql += """('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (
+                insert_sql += """('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (
                     webName, houseName[i], villageName[i], houseNote[i], houseTotlePrice[i], houseUnitPrice[i],
-                    houseLink[i], houseImg[i])
+                    houseLink[i], houseImg[i], followNum[i])
             else:
-                insert_sql += """,('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (
+                insert_sql += """,('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (
                     webName, houseName[i], villageName[i], houseNote[i], houseTotlePrice[i], houseUnitPrice[i],
-                    houseLink[i], houseImg[i])
+                    houseLink[i], houseImg[i], followNum[i])
         insert_sql += """;"""
         saved_rows = 0
         if len(houseName) > 0:
@@ -157,29 +161,29 @@ class saveData():
     # 贝壳找房
     def beike_save(self, html):
         beike = BeikeParser()
-        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = beike.feed(html)
-        self._saveData('贝壳', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
+        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum = beike.feed(html)
+        self._saveData('贝壳', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum)
 
     # 链家
     def lianjia_save(self, html):
         lianjia = LianjiaParser()
-        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = lianjia.feed(html)
-        self._saveData('链家', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
+        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum = lianjia.feed(html)
+        self._saveData('链家', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum)
 
     # 58同城
     def tongcheng_save(self, html):
         tongcheng = TongchengParser()
-        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = tongcheng.feed(html)
-        self._saveData('58同城', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
+        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum = tongcheng.feed(html)
+        self._saveData('58同城', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum)
 
     # 安居客
     def anjuke_save(self, html):
         anjuke = AnjukeParser()
-        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = anjuke.feed(html)
-        self._saveData('安居客', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
+        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum = anjuke.feed(html)
+        self._saveData('安居客', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum)
 
     # 赶集
     def ganji_save(self, html):
         ganji = GanjiParser()
-        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg = ganji.feed(html)
-        self._saveData('赶集', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg)
+        houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum = ganji.feed(html)
+        self._saveData('赶集', houseName, villageName, houseNote, houseTotlePrice, houseUnitPrice, houseLink, houseImg, followNum)

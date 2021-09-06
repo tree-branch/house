@@ -22,6 +22,15 @@ class reportData():
         down = pd.DataFrame()
         up = pd.DataFrame()
         other = pd.DataFrame()
+        # 为了兼容以前没有 关注人数的数据
+        if "followNum" in newdata.columns:
+            newdata["followNum"] = newdata["followNum"].astype('string')
+        else:
+            newdata["followNum"] = "0"
+        if "followNum" in olddata.columns:
+            olddata["followNum"] = olddata["followNum"].astype('string')
+        else:
+            olddata["followNum"] = "0"
         for index, row in newdata.iterrows():
             if row.houseLink in olddata.houseLink.tolist():
                 if row.houseTotlePrice < olddata[olddata.houseLink == row.houseLink].houseTotlePrice.iloc[0]:
@@ -47,6 +56,7 @@ class reportData():
                 <th>房屋总价</th>
                 <th>房屋历史总价</th>
                 <th>房屋单价</th>
+                <th>关注人数</th>
                 <th>小区名</th>
                 <th>房屋链接</th>
                 <th>来源网站</th>
@@ -67,6 +77,7 @@ class reportData():
                 <th>房屋总价</th>
                 <th>房屋历史总价</th>
                 <th>房屋单价</th>
+                <th>关注人数</th>
                 <th>小区名</th>
                 <th>房屋链接</th>
                 <th>来源网站</th>
@@ -87,9 +98,10 @@ class reportData():
                 <td>%s</td>
                 <td>%s</td>
                 <td>%s</td>
+                <td>%s</td>
                 <td><a href="%s" target="_blank">%s</a></td>
                 <td>%s</td>
-            </tr>'''% (row.sign, row.houseName, row.houseNote, row.houseTotlePrice, row.old_houseTotlePrice, row.houseUnitPrice, row.villageName, row.houseLink if row.houseLink[:4]=="http" else "http://" + row.houseLink, row.houseLink, row.webName)
+            </tr>'''% (row.sign, row.houseName, row.houseNote, row.houseTotlePrice, row.old_houseTotlePrice, row.houseUnitPrice, row.followNum, row.villageName, row.houseLink if row.houseLink[:4]=="http" else "http://" + row.houseLink, row.houseLink, row.webName)
         return result
 
     # 生成报告文件

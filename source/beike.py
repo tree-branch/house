@@ -22,6 +22,8 @@ class BeikeParser(HTMLParser):
         self.houseLink = []
         # 第一张图片
         self.houseImg = []
+        # 关注人数
+        self.followNum = []
         # 用于标记数据类型
         self.flag = []
         self.sign = 0
@@ -32,12 +34,12 @@ class BeikeParser(HTMLParser):
         size = len(self.houseName)
         if len(self.houseName) != size or len(self.villageName) != size or len(self.houseNote) != size \
                 or len(self.houseTotlePrice) != size or len(self.houseUnitPrice) != size or len(self.houseLink) != size \
-                or len(self.houseImg) != size:
+                or len(self.houseImg) != size or len(self.followNum) != size:
             raise ValueError("数据个数不一致：houseName-" + str(len(self.houseName)) + ",villageName-" + str(len(self.villageName)) +
                              ",houseNote-" + str(len(self.houseNote)) + ",houseTotlePrice-" + str(len(self.houseTotlePrice)) +
                              ",houseUnitPrice-" + str(len(self.houseUnitPrice)) + ",houseLink-" + str(len(self.houseLink)) +
-                             ",houseImg-" + str(len(self.houseImg)))
-        return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg
+                             ",houseImg-" + str(len(self.houseImg)) + ",followNum-" + str(len(self.followNum)))
+        return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg, self.followNum
 
     def handle_starttag(self, tag, attrs):
         if tag == "span":
@@ -57,7 +59,7 @@ class BeikeParser(HTMLParser):
         #     self.flag.append("villageName")
         # elif tag == "div" and ("class", "houseInfo") in attrs:
         #     self.flag.append("houseNote")
-        elif tag == "div" and ("class", "totalPrice") in attrs:
+        elif tag == "div" and ("class", "totalPrice totalPrice2") in attrs:
             self.flag.append("houseTotlePrice_2")
         elif tag == "div" and ("class", "unitPrice") in attrs:
             self.flag.append("houseUnitPrice_2")
@@ -74,6 +76,8 @@ class BeikeParser(HTMLParser):
         elif tag == "a" and len(self.flag) > 0 and self.flag[-1] == "villageName_1":
             self.flag.pop()
             self.flag.append("villageName_2")
+        elif tag == "div" and ("class", "followInfo") in attrs:
+            self.flag.append("followNum")
 
     def handle_data(self, data):
         data = data.replace(' ', '')
@@ -88,6 +92,12 @@ class BeikeParser(HTMLParser):
                     self.houseNote.append(self.span)
                     # self.villageName.append(self.span.split('|')[0].strip())
                     self.flag.pop()
+                elif len(self.flag) > 0 and self.flag[-1] == "followNum":
+                    self.followNum.append(int(self.span.replace(' ', '').split('人')[0]))
+                    self.flag.pop()
+                elif len(self.flag) > 0 and self.flag[-1] == "houseTotlePrice_2":
+                    self.houseTotlePrice_tmp = self.span
+                    # self.villageName.append(self.span.split('|')[0].strip())
             elif self.flag[-1] == "houseName":
                 # print(str(data))
                 self.houseName.append(data)

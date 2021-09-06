@@ -22,6 +22,8 @@ class LianjiaParser(HTMLParser):
         self.houseLink = []
         # 第一张图片
         self.houseImg = []
+        # 关注人数
+        self.followNum = []
         # 用于标记数据类型
         self.flag = []
 
@@ -31,12 +33,12 @@ class LianjiaParser(HTMLParser):
         size = len(self.houseName)
         if len(self.houseName) != size or len(self.villageName) != size or len(self.houseNote) != size \
                 or len(self.houseTotlePrice) != size or len(self.houseUnitPrice) != size or len(self.houseLink) != size \
-                or len(self.houseImg) != size:
+                or len(self.houseImg) != size or len(self.followNum) != size:
             raise ValueError("数据个数不一致：houseName-" + str(len(self.houseName)) + ",villageName-" + str(len(self.villageName)) +
                              ",houseNote-" + str(len(self.houseNote)) + ",houseTotlePrice-" + str(len(self.houseTotlePrice)) +
                              ",houseUnitPrice-" + str(len(self.houseUnitPrice)) + ",houseLink-" + str(len(self.houseLink)) +
-                             ",houseImg-" + str(len(self.houseImg)))
-        return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg
+                             ",houseImg-" + str(len(self.houseImg)) + ",followNum-" + str(len(self.followNum)))
+        return self.houseName, self.villageName, self.houseNote, self.houseTotlePrice, self.houseUnitPrice, self.houseLink, self.houseImg, self.followNum
 
     def handle_starttag(self, tag, attrs):
         if tag == "span":
@@ -52,7 +54,7 @@ class LianjiaParser(HTMLParser):
             self.flag.append("villageName")
         elif tag == "div" and ("class", "houseInfo") in attrs:
             self.flag.append("houseNote")
-        elif tag == "div" and ("class", "totalPrice") in attrs:
+        elif tag == "div" and ("class", "price") in attrs:
             self.flag.append("houseTotlePrice_2")
         elif tag == "div" and ("class", "unitPrice") in attrs:
             self.flag.append("houseUnitPrice_2")
@@ -64,6 +66,8 @@ class LianjiaParser(HTMLParser):
                             self.houseImg.append(attr2[1])
                             break
                     break
+        elif tag == "div" and ("class", "followInfo") in attrs:
+            self.flag.append("followNum")
 
     def handle_data(self, data):
         data = data.replace(' ', '')
@@ -75,6 +79,9 @@ class LianjiaParser(HTMLParser):
                 if len(self.flag) > 0 and self.flag[-1] == "houseUnitPrice_2":
                     self.houseUnitPrice.append(self.span)
                     self.flag.pop()
+                elif len(self.flag) > 0 and self.flag[-1] == "followNum":
+                    self.followNum.append(int(self.span.replace(' ', '').split('人')[0]))
+                    self.flag.pop()
             elif self.flag[-1] == "houseName":
                 # print(str(data))
                 self.houseName.append(data)
@@ -83,7 +90,7 @@ class LianjiaParser(HTMLParser):
                 # print(str(data))
                 self.villageName.append(data)
                 self.flag.pop()
-            elif self.flag[-1] == "houseTotlePrice_2":
+            elif self.flag[-1] == "houseTotlePrice_2" and data=="万":
                 # print(str(data))
                 self.houseTotlePrice.append(self.span + data)
                 self.span = ""
