@@ -40,6 +40,9 @@ python house.py
 ## 20210508log
 * 修复链家、贝壳数据错误的问题
 
+## 20211214log
+* 修复链家数据错误的问题
+
 
 ![](https://img-blog.csdnimg.cn/20200715103658153.png)
 

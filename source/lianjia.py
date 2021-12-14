@@ -43,7 +43,7 @@ class LianjiaParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == "span":
             self.flag.append("span")
-        elif tag == "a" and ("data-el", "ershoufang") in attrs and ("class", "title") in attrs:
+        elif tag == "a" and ("data-el", "ershoufang") in attrs and ("class", "") in attrs:
             self.flag.append("houseName")
             for attr in attrs:
                 if attr[0] == "href":
@@ -54,7 +54,7 @@ class LianjiaParser(HTMLParser):
             self.flag.append("villageName")
         elif tag == "div" and ("class", "houseInfo") in attrs:
             self.flag.append("houseNote")
-        elif tag == "div" and ("class", "price") in attrs:
+        elif tag == "div" and ("class", "totalPrice totalPrice2") in attrs:
             self.flag.append("houseTotlePrice_2")
         elif tag == "div" and ("class", "unitPrice") in attrs:
             self.flag.append("houseUnitPrice_2")
@@ -72,6 +72,7 @@ class LianjiaParser(HTMLParser):
     def handle_data(self, data):
         data = data.replace(' ', '')
         if len(self.flag) > 0:
+            # print(self.flag)
             if self.flag[-1] == "span":
                 # print(str(data))
                 self.span = data
